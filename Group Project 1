@@ -1,0 +1,372 @@
+%Exercise1
+diary on
+format compact
+type function subspace
+'function' is a built-in function.
+
+function [] = subspace(A,B)
+[m,x]=size(A);
+[n,y]=size(B);
+ 
+if m~=n
+    disp('Col A and Col B are subspaces of different spaces')
+    return
+else
+    fprintf('Col A and Col B are subspaces of R^%i\n',m)
+end
+ 
+fprintf('dimension of Col A= ');
+k=rank(A)
+fprintf('dimension of Col B= ');
+l=rank(B)
+ 
+rrefA=rref(A);
+rrefB=rref(B);
+bool=false;
+if k==l
+    if x==m
+        for i=m
+            for j=x
+        if(rrefA(m,x)==rrefB(m,x))
+            bool=true;
+        else
+            bool=false;
+            break;
+        end
+            end
+    if (bool==false)
+        break;
+    end
+        end
+    end
+
+    if (bool==true)
+        fprintf('“Col A = Col B”');
+    else
+        fprintf('“k = l, the dimensions of Col A and Col B are the same, but Col A ~= Col B” '); 
+    end
+    else        
+       fprintf('“k ~= l, the dimensions of Col A and Col B are different” ');      
+end
+ 
+ 
+    if k == m    
+        fprintf('k = m (% i = % i) Col A is all R^% i \n', k, m, m)
+    else
+        fprintf('k ~= m (% i ~= % i) Col A is not all R^% i \n', k, m, m)
+    end
+    if l == m
+        fprintf('l = m (% i = % i) Col A is all R^% i \n', l, m, m)
+    else    
+        fprintf('l ~= m (% i ~= % i) Col A is not all R^% i \n', l, m, m)
+    end
+   
+%Part A
+A=[2 -4 -2 3; 6 -9 -5 8; 2 -7 -3 9; 4 -2 -2 -1; -6 3 3 4];
+B=rref(A);
+subspace(A,B)
+Col A and Col B are subspaces of R^5
+dimension of Col A= k = 3
+dimension of Col B= l = 3
+
+“k = l, the dimensions of Col A and Col B are the same, but Col A ~ = Col B” k ~= m ( 3 ~=  5) Col A is not all R^ 5 
+l ~= m ( 3 ~=  5) Col A is not all R^ 5
+ 
+%Part B
+A=magic(4);
+B=eye(4);
+subspace(A,B)
+Col A and Col B are subspaces of R^4
+dimension of Col A= k = 3
+dimension of Col B= l = 4
+
+“k ~ = l, the dimensions of Col A and Col B are different” k ~= m ( 3 ~=  4) Col A is not all R^ 4 
+l = m ( 4 =  4) Col A is all R^ 4 
+
+%Part C
+A=magic(4);
+B=eye(3);
+subspace(A,B)
+Col A and Col B are subspaces of different spaces
+
+%Part D
+A=magic(5);
+B=eye(5);
+subspace(A,B)
+Col A and Col B are subspaces of R^5
+dimension of Col A= k = 5
+dimension of Col B= l = 5
+
+“k = l, the dimensions of Col A and Col B are the same,“Col A = Col B”, k = m ( 5 =  5) Col A is all R^ 5 
+l = m ( 5 =  5) Col A is all R^ 5 
+
+%Row operations should not affect the column space because pivot positions do not change
+
+
+
+%Exercise 2
+type shrink
+function B=shrink(A)
+[~,pivot]=rref(A);
+B=A(:,pivot);
+
+A=magic(4)
+A = 16     2     3    13
+     5    11    10     8
+     9     7     6    12
+     4    14    15     1
+
+[~,pivot]=rref(A)
+pivot = 1     2     3
+
+B=A(:,pivot)
+B = 16     2     3
+     5    11    10
+     9     7     6
+     4    14    15
+
+%The first identifies the pivot columns of matrix A the second command takes %the pivot columns of matrix A and puts them into matrix B.
+
+diary on
+type basis
+ 
+function B=basis(A)
+m=size(A,1);
+A=shrink(A);
+sprintf('a basis for Col A is\n')
+B=A
+ 
+s=eye(m); 
+if(rank(B)==rank(s))
+   sprintf('a basis for R^%i is \n',m)
+   return
+else
+    D=shrink([B s]);
+    [~,col]=size(D);
+    if(rank(D)==col)
+    sprintf('a basis for R^%i is \n',m)
+    B=D;
+    else 
+        sprintf('What? It is not a basis!?')
+    end
+end
+end
+ 
+A=[1 0;0 0;0 0;0 1];
+
+B=basis(A)
+ans = a basis for Col A is
+B =  1     0
+     0     0
+     0     0
+     0     1
+ 
+ 
+ans = a basis for R^4 is 
+B = 1     0     0     0
+    0     0     1     0
+    0     0     0     1
+    0     1     0     0
+ 
+A=[2 4;4 8;1 2;0 0];
+
+B=basis(A) 
+ans = a basis for Col A is
+B = 2
+    4
+    1
+    0
+ 
+ans = a basis for R^4 is 
+B = 2     1     0     0
+    4     0     1     0
+    1     0     0     0
+    0     0     0     1
+ 
+A=magic(5);
+
+B=basis(A)
+ans = a basis for Col A is
+B = 17    24     1     8    15
+    23     5     7    14    16
+     4     6    13    20    22
+    10    12    19    21     3
+    11    18    25     2     9
+ 
+ 
+ans = a basis for R^5 is 
+B = 17    24     1     8    15
+    23     5     7    14    16
+     4     6    13    20    22
+    10    12    19    21     3
+    11    18    25     2     9
+ 
+A=magic(4);
+
+B=basis(A)
+ans = a basis for Col A is
+B = 16     2     3
+     5    11    10
+     9     7     6
+     4    14    15
+ 
+ 
+ans = a basis for R^4 is 
+B = 16     2     3     1
+     5    11    10     0
+     9     7     6     0
+     4    14    15     0
+ 
+diary off
+
+#Exercise 3
+diary on
+type closetozeroroundoff
+ 
+function B=closetozeroroundoff(A)
+[m,n]=size(A);
+for i=1:m
+    for j=1:n
+        if abs(A(i,j))<10^(-7)
+            A(i,j) = 0;
+        end
+    end
+end
+B=A;
+end
+ 
+type polyspace
+ 
+function B = polyspace(P,Q,r)
+ 
+format rat,
+u=sym2poly(P(1));
+n=length(u);
+C=zeros(n);
+for i=1:n
+    C(:,i)=(sym2poly(P(i)))';
+end
+B=closetozeroroundoff(C); 
+ 
+if (rank(B)~=n)
+  sprintf('the polynomials in P do not form a basis in P%d',n-1);
+  fprintf('the reduced echelon form of B is %\n');
+  A=rref(B)
+  return 
+end
+ 
+if (rank(B)==n)
+    q=(sym2poly(Q))';
+    y=rref([B q]);
+    y=(y(:,(n+1)))';
+    fprintf('the coordinates of the polynomial Q with respect to the basis P are % \n') 
+    y=closetozeroroundoff(y)
+    
+    R=B*r;
+    fprintf('the coordinates of the polynomial R with whose P coordinates are    r are % \n') 
+    R=poly2sym(R)
+    
+end
+ 
+end
+ 
+ 
+  
+x=sym('x');
+%(a)
+P=[x^3+3*x^2-1,10^-8*x^3+2,10^-8*x^3+4*x^2+x,x^3+x];
+Q = [10^ - 8*x^3 + x^2 + 6*x + 4];
+r=[-2;3;-1;0];
+B=polyspace(P,Q,r)
+
+The coordinates of the polynomial Q with respect to the basis P are 
+y = -23/7            5/14          19/7           23/7     
+ 
+The coordinates of the polynomial R with whose P coordinates are r are  
+R = - 2*x^3 - 10*x^2 - x + 8
+ 
+B = 1              0              0              1       
+    3              0              4              0       
+    0              0              1              1       
+   -1              2              0              0       
+ 
+%(b)
+P=[x^3-1,10^-8*x^3+2,10^-8*x^3+x,x^3+x];
+%Q and r are the same as in (a)
+B=polyspace(P,Q,r)
+
+The polynomials in P do not form a basis in P3
+The reduced echelon form of B is 
+A = 1              0              0              1       
+    0              1              0              1/2     
+    0              0              1              1       
+    0              0              0              0       
+ 
+ 
+B = 1              0              0              1       
+    0              0              0              0       
+    0              0              1              1       
+   -1              2              0              0     
+
+%The reason that the polynomials of P don’t form a basis in P3 is because the %number of pivot positions in B does not equal the number of columns in P. %The rank of B is less than the columns of P.
+ 
+%(c)
+P=[x^4+1,10^-8*x^4+x^3+1,10^-8*x^4+x^2+1,10^-8*x^4+x+1,10^-8*x^4+1];
+Q=[x^4+x^3+x^2+x+1];
+r=ones(5,1);
+B=polyspace(P,Q,r)
+
+The coordinates of the polynomial Q with respect to the basis P are 
+y = 1              1              1              1             -3       
+ 
+The coordinates of the polynomial R with whose P coordinates are r are  
+R = x^4 + x^3 + x^2 + x + 5
+ 
+ B = 1              0              0              0              0       
+     0              1              0              0              0       
+     0              0              1              0              0       
+     0              0              0              1              0       
+     1              1              1              1              1       
+ 
+diary off
+
+
+
+%Exercise 4
+x=sym(‘x’)
+
+%a)
+a=-10;,b=10;,n=[1,5,10,50,100];
+P = 3*x^4 - 6*x^2 - 8;
+reimsum(P,a,b,n)
+       1              5             10             50            100       
+    -160         100448         111908         347045/3       231601/2     
+
+%b)
+P = x^5 - 5*x^3 + 2*x;
+reimsum(P,a,b,n)
+       1              5             10             50            100       
+       0              0              0              *              *           
+
+%Exercise5
+type polint
+ 
+function B=polint(P)
+x=sym('x');
+B=int(P)+1;
+ 
+%Part A
+P = x^5 + 2*x^4 + 3*x^3 + 4*x^2 + 5*x + 6;
+B=polint(P)
+B = x^6/6 + (2*x^5)/5 + (3*x^4)/4 + (4*x^3)/3 + (5*x^2)/2 + 6*x + 1
+ 
+%Part B
+P = x^6 - 4*x^3 + 1;
+B=polint(P)
+B = x^7/7 - x^4 + x + 1
+ 
+diary off
+
+
+
+
